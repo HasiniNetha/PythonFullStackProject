@@ -135,7 +135,7 @@ python main.py
 
 ## Technologies used
 
-   **Frontend**: Streamlit(Python wed framework)
+   **Frontend**: Streamlit(Python web framework)
    **Backend** :  fastAPI (Python REST API framework)
    **Database**: Supabase (PostgresSQL-based backend-as-a-service)
    **Language**: Python 3.8+
