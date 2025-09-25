@@ -155,7 +155,7 @@ python main.py
          - Check that you're running commands from the correct directory
 
 
-## Futeure Enhancements
+## Future Enhancements
 
    Ideas for extending this project
 
@@ -173,5 +173,5 @@ python main.py
 
 If you encounter any issues or have questions:
       emailID:hasinigurram2023@gmail.com
-      Ph No:6304712142
+      contact:6304712142
 
