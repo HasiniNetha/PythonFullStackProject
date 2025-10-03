@@ -1,153 +1,75 @@
 import os
-from supabase import create_client
+from supabase import create_client, Client
 from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
-url = os.getenv("SUPABASE_URL")
-key = os.getenv("SUPABASE_KEY")
 
-# Initialize Supabase client
-supabase = create_client(url, key)
+SUPABASE_URL="https://gcnlzbzmsxrworthtjxn.supabase.co"
+SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdjbmx6Ynptc3hyd29ydGh0anhuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgwODI1ODYsImV4cCI6MjA3MzY1ODU4Nn0.IKZOBmQo22TCSFHHnrzgGiGczu9kx04gmHc9fSPcoqM"
 
-# ============================
-# USERS CRUD
-# ============================
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-# Create a new user
-def create_user(username, email, password_hash):
-    data = {
-        "username": username,
-        "email": email,
-        "password_hash": password_hash
-    }
-    response = supabase.table("users").insert(data).execute()
-    return response
+def insert_sample_data():
+    """Insert comprehensive sample drinks into the database"""
+    sample_drinks = [
+        # 🍫 Chocolate
+        {"name": "Oreo Shake", "type": "Shake", "flavors": ["Chocolate", "Sweet", "Creamy"]},
+        {"name": "Choco Chip Shake", "type": "Shake", "flavors": ["Chocolate", "Sweet"]},
+        {"name": "Choco Burst Juice", "type": "Juice", "flavors": ["Chocolate", "Sweet"]},
+        {"name": "Dark Cocoa Juice", "type": "Juice", "flavors": ["Chocolate", "Tangy"]},
+        {"name": "Hot Chocolate", "type": "Drink", "flavors": ["Chocolate", "Sweet", "Warm"]},
+        {"name": "Iced Mocha", "type": "Drink", "flavors": ["Chocolate", "Creamy"]},
 
-# Get all users
-def get_all_users():
-    response = supabase.table("users").select("*").execute()
-    return response
+        # 🥭 Mango
+        {"name": "Mango Shake", "type": "Shake", "flavors": ["Mango", "Sweet", "Creamy"]},
+        {"name": "Mango Delight Shake", "type": "Shake", "flavors": ["Mango", "Fruity"]},
+        {"name": "Mango Juice", "type": "Juice", "flavors": ["Mango", "Sweet"]},
+        {"name": "Tropical Mango Juice", "type": "Juice", "flavors": ["Mango", "Tangy", "Fruity"]},
+        {"name": "Mango Cooler", "type": "Drink", "flavors": ["Mango", "Cool", "Sweet"]},
+        {"name": "Spicy Mango Drink", "type": "Drink", "flavors": ["Mango", "Tangy", "Spicy"]},
 
-# Get a single user by ID
-def get_user_by_id(user_id):
-    response = supabase.table("users").select("*").eq("id", user_id).execute()
-    return response
+        # 🍓 Strawberry
+        {"name": "Strawberry Shake", "type": "Shake", "flavors": ["Strawberry", "Sweet", "Fruity"]},
+        {"name": "Berry Blast Shake", "type": "Shake", "flavors": ["Strawberry", "Creamy"]},
+        {"name": "Strawberry Juice", "type": "Juice", "flavors": ["Strawberry", "Fruity"]},
+        {"name": "Tangy Strawberry Juice", "type": "Juice", "flavors": ["Strawberry", "Tangy", "Sweet"]},
+        {"name": "Strawberry Iced Tea", "type": "Drink", "flavors": ["Strawberry", "Cool", "Fruity"]},
+        {"name": "Strawberry Soda", "type": "Drink", "flavors": ["Strawberry", "Sweet", "Fizz"]},
 
-# Update a user
-def update_user(user_id, username=None, email=None, password_hash=None):
-    data = {}
-    if username:
-        data["username"] = username
-    if email:
-        data["email"] = email
-    if password_hash:
-        data["password_hash"] = password_hash
+        # 🍍 Pineapple
+        {"name": "Pineapple Shake", "type": "Shake", "flavors": ["Pineapple", "Sweet", "Creamy"]},
+        {"name": "Tropical Pineapple Shake", "type": "Shake", "flavors": ["Pineapple", "Fruity"]},
+        {"name": "Pineapple Juice", "type": "Juice", "flavors": ["Pineapple", "Tangy", "Sweet"]},
+        {"name": "Zesty Pineapple Juice", "type": "Juice", "flavors": ["Pineapple", "Tangy", "Fruity"]},
+        {"name": "Pineapple Fizz", "type": "Drink", "flavors": ["Pineapple", "Fizz", "Cool"]},
+        {"name": "Spiced Pineapple Drink", "type": "Drink", "flavors": ["Pineapple", "Spicy", "Sweet"]},
 
-    response = supabase.table("users").update(data).eq("id", user_id).execute()
-    return response
+        # 🌰 Nutty
+        {"name": "Ferrero Rocher Shake", "type": "Shake", "flavors": ["Chocolate", "Nutty", "Sweet"]},
+        {"name": "Nutty Vanilla Shake", "type": "Shake", "flavors": ["Nutty", "Creamy", "Sweet"]},
+        {"name": "Nut Punch Juice", "type": "Juice", "flavors": ["Nutty", "Sweet"]},
+        {"name": "Almond Delight Juice", "type": "Juice", "flavors": ["Nutty", "Creamy"]},
+        {"name": "Cashew Milk Drink", "type": "Drink", "flavors": ["Nutty", "Sweet", "Warm"]},
+        {"name": "Hazelnut Cold Brew", "type": "Drink", "flavors": ["Nutty", "Cool", "Bitter"]},
 
-# Delete a user
-def delete_user(user_id):
-    response = supabase.table("users").delete().eq("id", user_id).execute()
-    return response
+        # 🍬 Sweet (already covered in most)
+        {"name": "Sweet Banana Shake", "type": "Shake", "flavors": ["Sweet", "Creamy"]},
+        {"name": "Sweet Lassi", "type": "Juice", "flavors": ["Sweet", "Creamy"]},
+        {"name": "Rose Milk Drink", "type": "Drink", "flavors": ["Sweet", "Floral"]},
 
+        # 🧊 Cool
+        {"name": "Minty Shake", "type": "Shake", "flavors": ["Cool", "Creamy"]},
+        {"name": "Lime Cooler Juice", "type": "Juice", "flavors": ["Cool", "Tangy"]},
+        {"name": "Iced Lemon Drink", "type": "Drink", "flavors": ["Cool", "Citrus"]},
+    ]
 
-# ============================
-# JOURNAL ENTRIES CRUD
-# ============================
+    for drink in sample_drinks:
+        supabase.table("drinks").insert(drink).execute()
 
-# Create a new journal entry
-def create_entry(user_id, content, mood=None, tags=None):
-    data = {
-        "user_id": user_id,
-        "content": content,
-        "mood": mood,
-        "tags": tags if tags else []  # store tags as an array
-    }
-    response = supabase.table("entries").insert(data).execute()
-    return response
-
-# Get all entries (with optional filters)
-def get_all_entries(limit=50, offset=0):
-    response = (
-        supabase.table("entries")
-        .select("*")
-        .range(offset, offset + limit - 1)
-        .execute()
-    )
-    return response
-
-# Get entries by user
-def get_entries_by_user(user_id, limit=50, offset=0):
-    response = (
-        supabase.table("entries")
-        .select("*")
-        .eq("user_id", user_id)
-        .range(offset, offset + limit - 1)
-        .execute()
-    )
-    return response
-
-# Filter entries by mood
-def filter_entries_by_mood(mood, limit=50, offset=0):
-    response = (
-        supabase.table("entries")
-        .select("*")
-        .eq("mood", mood)
-        .range(offset, offset + limit - 1)
-        .execute()
-    )
-    return response
-
-# Filter entries by tag
-def filter_entries_by_tag(tag, limit=50, offset=0):
-    response = (
-        supabase.table("entries")
-        .select("*")
-        .contains("tags", [tag])  # checks if tag is inside array
-        .range(offset, offset + limit - 1)
-        .execute()
-    )
-    return response
-
-# Update a journal entry
-def update_entry(entry_id, content=None, mood=None, tags=None):
-    data = {}
-    if content:
-        data["content"] = content
-    if mood:
-        data["mood"] = mood
-    if tags is not None:
-        data["tags"] = tags  # full overwrite of tags array
-
-    response = supabase.table("entries").update(data).eq("id", entry_id).execute()
-    return response
-
-# Delete a journal entry
-def delete_entry(entry_id):
-    response = supabase.table("entries").delete().eq("id", entry_id).execute()
-    return response
+    return "✅ Sample data inserted!"
 
 
-# ============================
-# SEARCH & ANALYTICS
-# ============================
-
-# Full-text search on entries (title + content)
-def search_entries(query, limit=50, offset=0):
-    response = (
-        supabase.table("entries")
-        .select("*")
-        .text_search("content", query)
-        .range(offset, offset + limit - 1)
-        .execute()
-    )
-    return response
-
-# Get mood statistics for a user
-def get_mood_statistics(user_id):
-    response = (
-        supabase.rpc("get_mood_statistics", {"p_user_id": user_id}).execute()
-    )
-    return response
+def get_all_drinks():
+    """Fetch all drinks from database"""
+    return supabase.table("drinks").select("*").execute().data
